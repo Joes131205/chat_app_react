@@ -3,11 +3,12 @@ import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
 } from "firebase/auth";
-
+import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import app from "../firebase";
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function SignUp() {
     const [data, setData] = useState({
@@ -18,14 +19,39 @@ function SignUp() {
     });
     const auth = getAuth();
     const navigate = useNavigate();
-
-    function signUpUser(e) {
+    const storage = getStorage();
+    async function storeUsername(uid, username) {
+        if (username === "") {
+            username = `User ${uid.slice(1, 5)}`;
+        }
+        try {
+            const db = getFirestore(app);
+            const docRef = doc(db, "users", uid);
+            await setDoc(docRef, { username });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function storeDefaultProfilePicture(uid) {
+        const imagePath = "/images/default_profile_picture.png";
+        const response = await fetch(imagePath);
+        const blob = await response.blob();
+        const newFileName = `${uid}.png`;
+        const storageRef = ref(storage, `profile-pictures/${newFileName}`);
+        const metadata = {
+            contentType: "image/png",
+        };
+        await uploadBytes(storageRef, blob, metadata);
+    }
+    async function signUpUser(e) {
         e.preventDefault();
         if (data.password === data.confirmPassword) {
             const { email, password } = data;
-            createUserWithEmailAndPassword(auth, email, password).then(
-                (userCredential) => {
+            await createUserWithEmailAndPassword(auth, email, password).then(
+                async (userCredential) => {
                     const user = userCredential.user;
+                    await storeUsername(user.uid, data.username);
+                    await storeDefaultProfilePicture(user.uid);
                 }
             );
         }
@@ -38,7 +64,7 @@ function SignUp() {
         });
     }, []);
     return (
-        <div className="flex flex-col gap-10 items-center justify-center">
+        <div className="flex flex-col gap-10 items-center justify-center h-screen">
             <h1>Sign Up</h1>
             <form
                 className="flex flex-col gap-10 items-center justify-center"
@@ -97,6 +123,7 @@ function SignUp() {
                 </div>
                 <button type="submit">Submit</button>
             </form>
+            <Link to="/signin">Already have an account?</Link>
         </div>
     );
 }
