@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import Chat from "";
 function Root() {
     const auth = getAuth();
     const navigate = useNavigate();
@@ -50,6 +51,7 @@ function Root() {
                 />
                 <p>Hello, {username}!</p>
             </div>
+            <Chat />
             <button onClick={() => signOut(auth)}>Sign Out</button>
         </div>
     );
