@@ -1,9 +1,9 @@
 "use strict";
 
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 function Setting() {
@@ -81,6 +81,14 @@ function Setting() {
         }
         navigate("/");
     }
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                navigate("/signup");
+            }
+        });
+    }, []);
 
     return (
         <div>
