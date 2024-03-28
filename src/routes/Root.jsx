@@ -5,7 +5,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import Chat from "../Chat";
 function Root() {
@@ -13,19 +13,19 @@ function Root() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState("");
+
     async function fetchUserName(uid) {
         const db = getFirestore(app);
         const usersCollection = await collection(db, "users");
         const docRef = doc(usersCollection, uid);
         const docSnap = await getDoc(docRef);
         const data = await docSnap.data();
-        console.log(data);
         setUsername(data.username);
     }
 
     async function fetchProfilePicture(uid) {
         const storage = getStorage();
-        const profilePictureRef = await ref(storage, `profile-pictures/${uid}`);
+        const profilePictureRef = ref(storage, `profile-pictures/${uid}.png`);
         const snap = await getDownloadURL(profilePictureRef);
         setProfilePicture(snap);
     }
@@ -40,17 +40,19 @@ function Root() {
             }
         });
     }, []);
+
     return (
         <div>
             <h1>Chat App</h1>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
                 <img
                     src={profilePicture}
                     alt="Profile Picture"
-                    className="rounded-full w-50 h-50 border-2 border-black"
+                    className="rounded-full w-10 h-10 border-2 border-black"
                 />
                 <p>Hello, {username}!</p>
             </div>
+            <Link to="/setting">Setting</Link>
             <Chat />
             <button onClick={() => signOut(auth)}>Sign Out</button>
         </div>
