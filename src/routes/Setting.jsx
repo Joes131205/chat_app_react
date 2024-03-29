@@ -1,10 +1,18 @@
 "use strict";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+    getFirestore,
+    setDoc,
+    doc,
+    getDoc,
+    collection,
+} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
+import app from "../firebase";
 
 function Setting() {
     const [data, setData] = useState({
@@ -82,34 +90,54 @@ function Setting() {
         navigate("/");
     }
 
+    async function fetchUserName(uid) {
+        const db = getFirestore(app);
+        const usersCollection = await collection(db, "users");
+        const docRef = doc(usersCollection, uid);
+        const docSnap = await getDoc(docRef);
+        const username = await docSnap.data().username;
+        setData((prev) => ({ ...prev, changeUserName: username }));
+    }
+
+    async function fetchProfilePicture(uid) {
+        const storage = getStorage();
+        const profilePictureRef = ref(storage, `profile-pictures/${uid}.png`);
+        const snap = await getDownloadURL(profilePictureRef);
+        setData((prev) => ({ ...prev, profilePictureReview: snap }));
+    }
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const uid = user.uid;
+                await fetchUserName(uid);
+                await fetchProfilePicture(uid);
+            } else {
                 navigate("/signup");
             }
         });
     }, []);
 
     return (
-        <div>
-            <h1>Setting</h1>
+        <div className="flex flex-col items-center justify-center gap-10">
+            <h1 className="font-bold">Setting</h1>
 
             <form
                 className="flex flex-col items-center justify-center gap-10"
                 onSubmit={changeSetting}
-                onChange={changeData}
             >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 items-center justify-center">
                     <label htmlFor="changeUserName">Change Username</label>
                     <input
                         type="text"
                         name="changeUserName"
                         id="changeUserName"
-                        value={data.username}
+                        value={data.changeUserName}
+                        className="border-2 border-black"
+                        onChange={changeData}
                     />
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 items-center justify-center">
                     <label htmlFor="changeProfilePicture">
                         Change Profile Picture (Accepts PNG)
                     </label>
@@ -118,9 +146,13 @@ function Setting() {
                         name="changeProfilePicture"
                         id="changeProfilePicture"
                         accept="image/png, image/jpg"
+                        onChange={changeData}
                     />
                     <img
-                        src={data.profilePictureReview}
+                        src={
+                            data.profilePictureReview ||
+                            "/images/placeholder.png"
+                        }
                         alt="Profile Picture"
                         className="rounded-full w-24 h-24 border-2 border-black"
                     />
