@@ -2,14 +2,15 @@ import {
     getFirestore,
     collection,
     addDoc,
-    getDocs,
     onSnapshot,
     orderBy,
     query,
 } from "firebase/firestore";
 import app from "../firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAuth } from "firebase/auth";
+
+import { useNavigate } from "react-router-dom";
 
 import ChatBubble from "../components/ChatBubble";
 
@@ -17,12 +18,11 @@ function Chat() {
     const [inputMessage, setInputMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
+    const messagesEndRef = useRef(null);
+
     const auth = getAuth();
 
     const db = getFirestore(app);
-
-    const docRef = collection(db, "messages");
-    const docSnap = getDocs(docRef);
 
     function sendMessage(locale) {
         if (inputMessage) {
@@ -65,9 +65,16 @@ function Chat() {
 
         return () => unsubscribe();
     }, [db]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(scrollToBottom, [messages]);
+
     return (
-        <div className="w-full h-[100vh - 1.25rem] margin-0">
-            <div className="h-[51rem] flex flex-col gap-20 mx-20">
+        <div className="w-full h-[100vh-1.25rem] margin-0 ">
+            <div className="h-[51rem] max-h-[51rem] flex flex-col gap-10 mx-20 items-start overflow-y-auto no-scrollbar">
                 {messages.map((message, i) => (
                     <ChatBubble
                         key={i}
@@ -76,20 +83,23 @@ function Chat() {
                         uid={message.uid}
                     />
                 ))}
+                <div ref={messagesEndRef} />
             </div>
-            <input
-                type="text"
-                placeholder="Message..."
-                className="h-[2.6rem] w-[90%] border border-black"
-                onChange={(e) => setInputMessage(e.target.value)}
-                value={inputMessage}
-            />
-            <button
-                className="w-[10%] border border-black h-[2.6rem]"
-                onClick={sendMessage}
-            >
-                Send!
-            </button>
+            <div className="sticky bottom-0">
+                <input
+                    type="text"
+                    placeholder="Message..."
+                    className="h-[2.6rem] w-[90%] border border-black text-black"
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    value={inputMessage}
+                />
+                <button
+                    className="w-[10%] border border-black h-[2.6rem]"
+                    onClick={sendMessage}
+                >
+                    Send!
+                </button>
+            </div>
         </div>
     );
 }

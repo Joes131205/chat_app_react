@@ -1,6 +1,6 @@
 function SideBar(props) {
     return (
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center ">
             <img
                 src={props.profilePicture}
                 alt="Profile Picture"

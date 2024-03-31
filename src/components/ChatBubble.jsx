@@ -36,12 +36,14 @@ function ChatBubble({ text, createdAt, uid }) {
     return (
         <div
             className={`${
-                uid === currUid ? "justify-end" : "justify-start"
-            } flex text-2xl`}
+                uid === currUid
+                    ? "  bg-[#008000] translate-x-[70rem]"
+                    : " bg-[#575757]"
+            } justify-start flex text-2xl min-w-2/6 py-5 px-5 text-[#E0E0E0] rounded-xl`}
         >
             <div className="flex flex-col gap-3">
-                <div className="flex gap-10 items-center justify-center">
-                    <div className="flex gap-2 items-center justify-center">
+                <div className="flex gap-10 items-center justify-center font-bold">
+                    <div className="flex gap-2 items-center justify-start">
                         <img
                             src={profilePicture}
                             alt="Profile Picture"
@@ -53,7 +55,7 @@ function ChatBubble({ text, createdAt, uid }) {
                     <p>{createdAt}</p>
                 </div>
 
-                <p className="font-bold">{text}</p>
+                <p>{text}</p>
             </div>
         </div>
     );

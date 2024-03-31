@@ -80,6 +80,7 @@ function SignUp() {
                             setData({ ...data, username: e.target.value })
                         }
                         value={data.username}
+                        className="text-black"
                     />
                 </div>
                 <div className="flex flex-col">
@@ -92,6 +93,7 @@ function SignUp() {
                             setData({ ...data, email: e.target.value })
                         }
                         value={data.email}
+                        className="text-black"
                     />
                 </div>
                 <div className="flex flex-col">
@@ -104,6 +106,7 @@ function SignUp() {
                             setData({ ...data, password: e.target.value })
                         }
                         value={data.password}
+                        className="text-black"
                     />
                 </div>
                 <div className="flex flex-col">
@@ -119,6 +122,7 @@ function SignUp() {
                             })
                         }
                         value={data.confirmPassword}
+                        className="text-black"
                     />
                 </div>
                 <button type="submit">Submit</button>

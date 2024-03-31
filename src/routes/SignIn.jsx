@@ -32,7 +32,7 @@ function SignIn() {
         });
     }, []);
     return (
-        <div className="flex flex-col gap-10 items-center justify-center h-screen">
+        <div className="flex flex-col gap-10 items-center justify-center h-screen ">
             <h1>Sign In</h1>
             <form
                 className="flex flex-col gap-10 items-center justify-center"
@@ -46,6 +46,7 @@ function SignIn() {
                         onChange={(e) =>
                             setData({ ...data, email: e.target.value })
                         }
+                        className="text-black"
                     />
                 </div>
                 <div className="flex flex-col">
@@ -56,6 +57,7 @@ function SignIn() {
                         onChange={(e) =>
                             setData({ ...data, password: e.target.value })
                         }
+                        className="text-black"
                     />
                 </div>
 

@@ -45,10 +45,11 @@ function Root() {
 
     return (
         <div className="flex flex-col gap-5">
-            <div className="flex gap-20 items-center ">
+            <div className="flex gap-20 items-center">
                 <SideBar
                     username={username}
                     profilePicture={profilePicture}
+                    className="fixed top-0 "
                 ></SideBar>
                 <Link to="/setting">Setting</Link>
                 <button onClick={() => signOut(auth)}>Sign Out</button>
