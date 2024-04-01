@@ -57,6 +57,9 @@ function SignUp() {
         }
     }
     useEffect(() => {
+        document.title = "Chat App | Sign Up";
+    }, []);
+    useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 navigate("/");
@@ -65,13 +68,15 @@ function SignUp() {
     }, []);
     return (
         <div className="flex flex-col gap-10 items-center justify-center h-screen">
-            <h1>Sign Up</h1>
+            <h1 className="font-bold text-4xl">Sign Up</h1>
             <form
                 className="flex flex-col gap-10 items-center justify-center"
                 onSubmit={signUpUser}
             >
                 <div className="flex flex-col">
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username" className="font-bold">
+                        Username
+                    </label>
                     <input
                         type="text"
                         name="username"
@@ -80,11 +85,14 @@ function SignUp() {
                             setData({ ...data, username: e.target.value })
                         }
                         value={data.username}
-                        className="text-black"
+                        className="text-black px-5 py-2 rounded-xl"
+                        placeholder="Username..."
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email" className="font-bold">
+                        Email
+                    </label>
                     <input
                         type="email"
                         name="email"
@@ -93,11 +101,14 @@ function SignUp() {
                             setData({ ...data, email: e.target.value })
                         }
                         value={data.email}
-                        className="text-black"
+                        className="text-black px-5 py-2 rounded-xl"
+                        placeholder="Email..."
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password" className="font-bold">
+                        Password
+                    </label>
                     <input
                         type="password"
                         name="password"
@@ -106,11 +117,14 @@ function SignUp() {
                             setData({ ...data, password: e.target.value })
                         }
                         value={data.password}
-                        className="text-black"
+                        className="text-black px-5 py-2 rounded-xl"
+                        placeholder="Password..."
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword" className="font-bold">
+                        Confirm Password
+                    </label>
                     <input
                         type="password"
                         name="confirmPassword"
@@ -122,10 +136,16 @@ function SignUp() {
                             })
                         }
                         value={data.confirmPassword}
-                        className="text-black"
+                        className="text-black px-5 py-2 rounded-xl"
+                        placeholder="Confirm Password.."
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button
+                    type="submit"
+                    className="px-5 py-2 bg-green-500 text-black rounded-md cursor-pointer font-bold hover:scale-110 transition"
+                >
+                    Sign Up!
+                </button>
             </form>
             <Link to="/signin">Already have an account?</Link>
         </div>

@@ -5,7 +5,7 @@ import "./index.css";
 import Root from "./routes/Root";
 import SignIn from "./routes/SignIn";
 import SignUp from "./routes/SignUp";
-import Setting from "./routes/Setting"
+import Setting from "./routes/Setting";
 
 import Error from "./routes/Error";
 

@@ -1,5 +1,3 @@
-"use strict";
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
     getFirestore,
@@ -105,6 +103,11 @@ function Setting() {
         const snap = await getDownloadURL(profilePictureRef);
         setData((prev) => ({ ...prev, profilePictureReview: snap }));
     }
+
+    useEffect(() => {
+        document.title = "Chat App | Setting";
+    }, []);
+
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -118,27 +121,29 @@ function Setting() {
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center gap-10">
-            <h1 className="font-bold">Setting</h1>
+        <div className="flex flex-col items-center justify-center gap-10 h-screen">
+            <h1 className="font-bold text-4xl">Setting</h1>
 
             <form
                 className="flex flex-col items-center justify-center gap-10"
                 onSubmit={changeSetting}
             >
                 <div className="flex flex-col gap-2 items-center justify-center">
-                    <label htmlFor="changeUserName">Change Username</label>
+                    <label htmlFor="changeUserName" className="font-bold">
+                        Change Username
+                    </label>
                     <input
                         type="text"
                         name="changeUserName"
                         id="changeUserName"
                         value={data.changeUserName}
-                        className="border-2 border-black"
+                        className="border-2 border-black text-black px-5 py-2 rounded-xl"
                         onChange={changeData}
                     />
                 </div>
 
                 <div className="flex flex-col gap-2 items-center justify-center">
-                    <label htmlFor="changeProfilePicture">
+                    <label htmlFor="changeProfilePicture" className="font-bold">
                         Change Profile Picture (Accepts PNG)
                     </label>
                     <input
@@ -154,13 +159,22 @@ function Setting() {
                             "/images/placeholder.png"
                         }
                         alt="Profile Picture"
-                        className="rounded-full w-24 h-24 border-2 border-black"
+                        className="rounded-full w-24 h-24 border-2 border-black "
                     />
                 </div>
 
-                <input type="submit" value="Submit" />
+                <input
+                    type="submit"
+                    value="Submit"
+                    className="px-5 py-2 bg-green-500 text-black rounded-md cursor-pointer font-bold hover:scale-110 transition"
+                />
             </form>
-            <Link to="/">Go back</Link>
+            <Link
+                to="/"
+                className="px-5 py-2 bg-red-500 text-black rounded-md cursor-pointer font-bold hover:scale-110 transition"
+            >
+                Go back
+            </Link>
         </div>
     );
 }

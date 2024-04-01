@@ -85,19 +85,29 @@ function Chat() {
                 ))}
                 <div ref={messagesEndRef} />
             </div>
-            <div className="sticky bottom-0">
+            <div className="sticky bottom-0 flex">
                 <input
                     type="text"
                     placeholder="Message..."
-                    className="h-[2.6rem] w-[90%] border border-black text-black"
+                    className="h-[2.6rem] w-[90%] bg-[#2f2f2f] outline-transparent rounded-xl px-5"
                     onChange={(e) => setInputMessage(e.target.value)}
                     value={inputMessage}
                 />
                 <button
-                    className="w-[10%] border border-black h-[2.6rem]"
+                    className="w-[10%] border border-black h-[2.6rem] bg-green-300 font-bold flex items-center justify-center gap-5 text-black"
                     onClick={sendMessage}
                 >
+                    <img
+                        src="/images/send_button.svg"
+                        alt="Send Icon"
+                        className="w-5"
+                    />
                     Send!
+                    <img
+                        src="/images/send_button.svg"
+                        alt="Send Icon"
+                        className="w-5"
+                    />
                 </button>
             </div>
         </div>

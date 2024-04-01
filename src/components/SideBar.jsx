@@ -6,7 +6,9 @@ function SideBar(props) {
                 alt="Profile Picture"
                 className="rounded-full w-10 h-10 border-2 border-black"
             />
-            <p>Hello, {props.username}!</p>
+            <p>
+                Hello, <span className="font-bold">{props.username}</span>!
+            </p>
         </div>
     );
 }

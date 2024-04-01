@@ -51,8 +51,12 @@ function Root() {
                     profilePicture={profilePicture}
                     className="fixed top-0 "
                 ></SideBar>
-                <Link to="/setting">Setting</Link>
-                <button onClick={() => signOut(auth)}>Sign Out</button>
+                <Link to="/setting" className="font-bold">
+                    Setting
+                </Link>
+                <button onClick={() => signOut(auth)} className="font-bold">
+                    Sign Out
+                </button>
             </div>
             <Chat />
         </div>
