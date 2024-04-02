@@ -2,6 +2,7 @@ import {
     getAuth,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    GoogleAuthProvider,
 } from "firebase/auth";
 
 import app from "../firebase";
@@ -13,20 +14,28 @@ function SignIn() {
         email: "",
         password: "",
     });
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const auth = getAuth();
+    const provider = new GoogleAuthProvider();
     async function signInUser(e) {
         e.preventDefault();
+        setError("");
         const { email, password } = data;
         await signInWithEmailAndPassword(auth, email, password).catch(
             (error) => {
-                alert(error.message);
+                const message = error.message
+                    .split("/")[1]
+                    .slice(0, -2)
+                    .replaceAll("-", " ");
+                setError(message[0].toUpperCase() + message.slice(1));
             }
         );
     }
     useEffect(() => {
         document.title = "Chat App | Sign In";
     }, []);
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -75,6 +84,8 @@ function SignIn() {
                     Sign In!
                 </button>
             </form>
+
+            <p className="text-red-600 font-bold">{error ?? ""}</p>
             <Link to="/signup">Don't have an account?</Link>
         </div>
     );

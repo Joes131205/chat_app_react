@@ -37,19 +37,19 @@ function ChatBubble({ text, createdAt, uid }) {
         <div
             className={`${
                 uid === currUid
-                    ? "  bg-[#008000] translate-x-[70rem]"
+                    ? "  bg-[#008000] md:translate-x-[150%]"
                     : " bg-[#575757]"
-            } justify-start flex text-2xl min-w-2/6 py-5 px-5 text-[#E0E0E0] rounded-xl`}
+            } flex text-2xl md:min-w-[40rem] md:max-w-[40rem] min-w-[10rem] max-w-[30rem]  py-5 px-5 text-[#E0E0E0] rounded-xl`}
         >
             <div className="flex flex-col gap-3">
-                <div className="flex gap-10 items-center justify-center font-bold">
+                <div className="flex gap-10 items-center justify-center font-bold text-start">
                     <div className="flex gap-2 items-center justify-start">
                         <img
                             src={profilePicture}
                             alt="Profile Picture"
                             className="rounded-full w-10 h-10 border-2 border-black"
                         />
-                        <p>{username}</p>
+                        <p className="text-start">{username}</p>
                     </div>
 
                     <p>{createdAt}</p>

@@ -72,9 +72,13 @@ function Chat() {
 
     useEffect(scrollToBottom, [messages]);
 
+    useEffect(() => {
+        document.title = "Chat App";
+    }, []);
+
     return (
         <div className="w-full h-[100vh-1.25rem] margin-0 ">
-            <div className="h-[51rem] max-h-[51rem] flex flex-col gap-10 mx-20 items-start overflow-y-auto no-scrollbar">
+            <div className="h-[51rem] max-h-[51rem] flex flex-col gap-10 md:mx-20 items-start overflow-y-auto no-scrollbar">
                 {messages.map((message, i) => (
                     <ChatBubble
                         key={i}
@@ -97,17 +101,7 @@ function Chat() {
                     className="w-[10%] border border-black h-[2.6rem] bg-green-300 font-bold flex items-center justify-center gap-5 text-black"
                     onClick={sendMessage}
                 >
-                    <img
-                        src="/images/send_button.svg"
-                        alt="Send Icon"
-                        className="w-5"
-                    />
                     Send!
-                    <img
-                        src="/images/send_button.svg"
-                        alt="Send Icon"
-                        className="w-5"
-                    />
                 </button>
             </div>
         </div>

@@ -17,6 +17,7 @@ function SignUp() {
         password: "",
         confirmPassword: "",
     });
+    const [error, setError] = useState("");
     const auth = getAuth();
     const navigate = useNavigate();
     const storage = getStorage();
@@ -45,15 +46,24 @@ function SignUp() {
     }
     async function signUpUser(e) {
         e.preventDefault();
+        setError("");
         if (data.password === data.confirmPassword) {
             const { email, password } = data;
-            await createUserWithEmailAndPassword(auth, email, password).then(
-                async (userCredential) => {
+            await createUserWithEmailAndPassword(auth, email, password)
+                .then(async (userCredential) => {
                     const user = userCredential.user;
                     await storeUsername(user.uid, data.username);
                     await storeDefaultProfilePicture(user.uid);
-                }
-            );
+                })
+                .catch((error) => {
+                    const message = error.message
+                        .split("/")[1]
+                        .slice(0, -2)
+                        .replaceAll("-", " ");
+                    setError(message[0].toUpperCase() + message.slice(1));
+                });
+        } else {
+            setError("Password confirmation not matched");
         }
     }
     useEffect(() => {
@@ -147,6 +157,8 @@ function SignUp() {
                     Sign Up!
                 </button>
             </form>
+            <p className="text-red-600 font-bold">{error ?? ""}</p>
+
             <Link to="/signin">Already have an account?</Link>
         </div>
     );
