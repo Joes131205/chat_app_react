@@ -2,6 +2,7 @@ import {
     getAuth,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth";
 
@@ -17,7 +18,9 @@ function SignIn() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const auth = getAuth();
+    auth.useDeviceLanguage();
     const provider = new GoogleAuthProvider();
+
     async function signInUser(e) {
         e.preventDefault();
         setError("");
@@ -31,6 +34,22 @@ function SignIn() {
                 setError(message[0].toUpperCase() + message.slice(1));
             }
         );
+    }
+    async function signInGoogle() {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const credential =
+                    GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.customData.email;
+                const credential =
+                    GoogleAuthProvider.credentialFromError(error);
+            });
     }
     useEffect(() => {
         document.title = "Chat App | Sign In";
@@ -86,7 +105,23 @@ function SignIn() {
             </form>
 
             <p className="text-red-600 font-bold">{error ?? ""}</p>
-            <Link to="/signup">Don't have an account?</Link>
+            <button
+                onClick={signInGoogle}
+                className="flex gap-10 items-center justify-center bg-white px-5 py-2 text-black rounded-xl font-bold hover:scale-110 transition"
+            >
+                <img
+                    src="/images/google-color-svgrepo-com.svg"
+                    className="w-8"
+                />
+                Sign In With Google
+                <img
+                    src="/images/google-color-svgrepo-com.svg"
+                    className="w-8"
+                />
+            </button>
+            <Link to="/signup" className="text-sky-300 underline">
+                Don't have an account?
+            </Link>
         </div>
     );
 }
