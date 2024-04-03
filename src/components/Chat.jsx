@@ -10,8 +10,6 @@ import app from "../firebase";
 import { useEffect, useState, useRef } from "react";
 import { getAuth } from "firebase/auth";
 
-import { useNavigate } from "react-router-dom";
-
 import ChatBubble from "../components/ChatBubble";
 
 function Chat() {
@@ -46,9 +44,8 @@ function Chat() {
                 uid,
                 time: Date.now(),
             };
-            addDoc(newMessageRef, newMessage).then(() => {
-                setInputMessage("");
-            });
+            addDoc(newMessageRef, newMessage);
+            setInputMessage("");
         }
     }
 
@@ -76,8 +73,19 @@ function Chat() {
         document.title = "Chat App";
     }, []);
 
+    const handleKeyDown = (event) => {
+        console.log(event.target);
+        if (event.key === "Enter" && event.target.tagName === "INPUT") {
+            sendMessage();
+        }
+    };
+
     return (
-        <div className="w-full h-[100vh-1.25rem] margin-0 ">
+        <div
+            tabIndex="0"
+            onKeyDown={handleKeyDown}
+            className="w-full h-[100vh-1.25rem] margin-0 "
+        >
             <div className="h-[51rem] max-h-[51rem] flex flex-col gap-10 md:mx-20 items-start overflow-y-auto no-scrollbar">
                 {messages.map((message, i) => (
                     <ChatBubble
